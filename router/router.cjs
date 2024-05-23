@@ -12,5 +12,6 @@ router.post(
   s3PhotoController.uploadWithUser,
   s3PhotoController.uploadEnd
 );
+router.get('/photo/:name', s3PhotoController.searchPhotoByUser);
 
 module.exports = router;

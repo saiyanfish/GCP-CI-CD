@@ -20,3 +20,18 @@ exports.uploadEnd = catchAsync(async (req, res) => {
   });
   res.render('result', { imageUrl: imageUrl });
 });
+
+exports.searchPhotoByUser = catchAsync(async (req, res, next) => {
+  const name = req.params.name;
+  const user = await s3User.findOne({ name: name });
+  if (!user) return next(new Error('no this user'));
+  const photos = await s3Photo
+    .find({ s3User: user.id })
+    .select('address s3User -_id')
+    .populate({ path: 's3User', select: 'name -_id' });
+  let newphoto = photos.map((item) => {
+    return { address: item.address, name: item.s3User.name };
+  });
+
+  res.status(200).json({ newphoto });
+});

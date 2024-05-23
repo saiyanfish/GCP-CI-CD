@@ -26,7 +26,7 @@ app.use(userRouter);
 app.use(view);
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send('Something went wrong!');
+  res.status(500).send(err.message);
 });
 app.listen(8000, () => {
   console.log('app starts');
