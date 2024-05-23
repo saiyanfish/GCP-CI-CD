@@ -13,6 +13,9 @@ before_script:
 
 build:
   stage: build
+  image: docker:19.03.12
+  services:
+    - docker:19.03.12-dind
   script:
     - docker build -t raygun3491/s3upload:$IMAGE_TAG .
     - docker push raygun3491/s3upload:$IMAGE_TAG
@@ -21,7 +24,9 @@ build:
 
 deploy:
   stage: deploy
+  image: python:3.8-alpine
   script:
+    - pip install --upgrade awscli
     - aws ecs update-service --cluster $CI_AWS_ECS_CLUSTER --service $CI_AWS_ECS_SERVICE --force-new-deployment
   only:
     - main
