@@ -12,9 +12,9 @@ before_script:
 
 build:
   stage: build
-  image: docker:19.03.12
+  image: docker:20.10.17
   services:
-    - docker:19.03.12-dind
+    - docker:20.10.17-dind
   script:
     - python3 -m venv venv
     - source venv/bin/activate
