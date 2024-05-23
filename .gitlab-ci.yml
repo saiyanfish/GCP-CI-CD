@@ -16,7 +16,10 @@ build:
   services:
     - docker:19.03.12-dind
   script:
-    - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username raygun3491 --password-stdin raygun20A
+    - python3 -m venv venv
+    - source venv/bin/activate
+    - aws ecr get-login-password --region $AWS_DEFAULT_REGION
+    - docker login --username raygun3491 --password-stdin raygun20A
     - docker build -t raygun3491/s3upload:$IMAGE_TAG .
     - docker push raygun3491/s3upload:$IMAGE_TAG
   only:
