@@ -1,0 +1,5 @@
+services:
+  backend:
+    image: raygun3491/s3upload
+    ports:
+      - 8000:8000
