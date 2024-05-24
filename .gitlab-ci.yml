@@ -101,10 +101,10 @@ backend-deploy:
   before_script:
     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - chmod 400 "$SSH_PRIVATE_KEY"
+    - ssh-add "$SSH_PRIVATE_KEY"
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
   script:
     - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker images && \ docker ps -a
     - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker compose down
