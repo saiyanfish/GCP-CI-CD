@@ -114,8 +114,8 @@ backend-deploy:
     ## Give the right permissions, otherwise ssh-add will refuse to add files
     ## Add the SSH key stored in SSH_PRIVATE_KEY file type CI/CD variable to the agent store
     ##
-    - chmod 400 "$SSH_KEY_PRIVATE_GCP"
-    - ssh-add "$SSH_KEY_PRIVATE_GCP"
+    - chmod 400 "$SSH_PRIVATE_KEY"
+    - ssh-add "$SSH_PRIVATE_KEY"
 
     ##
     ## Create the SSH directory and give it the right permissions
