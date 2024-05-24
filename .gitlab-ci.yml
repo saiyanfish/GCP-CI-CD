@@ -99,11 +99,9 @@ backend-deploy:
   stage: deploy
   image: gitlab/dind:latest
   before_script:
-    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-    - 'command -v sshpass >/dev/null || ( apt-get update -y && apt-get install -y sshpass )'
     - eval $(ssh-agent -s)
     - chmod 400 "$SSH_PRIVATE_KEY"
-    - sshpass -p "$SSH_PRIVATE_KEY_PASSPHRASE" ssh-add "$SSH_PRIVATE_KEY"
+    - echo "$SSH_PRIVATE_KEY_PASSPHRASE" | ssh-add "$SSH_PRIVATE_KEY"
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
