@@ -106,23 +106,9 @@ backend-deploy:
     - chmod 700 ~/.ssh
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
   script:
-    - set -x
-    - |
-      ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} "
-        docker images && \
-        docker ps -a || exit 1
-      "
-    - |
-      ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} "
-        docker compose down || true
-      "
-    - |
-      ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} "
-        docker compose up -d || exit 1
-      "
-    - |
-      ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} "
-      docker image prune -f || true
-      "
+    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker images && \ docker ps -a
+    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker compose down
+    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker compose up -d
+    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker image prune -f || true
   only:
     - main
