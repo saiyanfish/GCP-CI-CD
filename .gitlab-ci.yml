@@ -101,11 +101,10 @@ backend-deploy:
   before_script:
     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
-    - echo "${SSH_PRIVATE_KEY}" | tr -d '\r' > id_rsa
-    - chmod 400 id_rsa
+    - chmod 400 "${SSH_PRIVATE_KEY}"
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - ssh-add id_rsa
+    - ssh-add "${SSH_PRIVATE_KEY}"
   script:
     - set -x
     - |
