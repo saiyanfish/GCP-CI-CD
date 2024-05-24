@@ -103,13 +103,24 @@ backend-deploy:
     - eval $(ssh-agent -s)
     - echo "${SSH_PRIVATE_KEY_GCE}" | tr -d '\r' > deploy.pem
     - chmod 400 deploy.pem
-    - ssh-add deploy.pem
+    - echo "$SSH_PASSPHRASE" | ssh-add -k deploy.pem
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - 'echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
-    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} "docker images && docker ps -a"
-      - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} "docker-compose down"
-    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} "docker-compose up -d"
+    - set -x
+    - |
+      ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} "
+        docker images && \
+        docker ps -a || exit 1
+      "
+    - |
+      ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} "
+        docker compose down || true
+      "
+    - |
+      ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} "
+        docker compose up -d || exit 1
+      "
   only:
     - main
