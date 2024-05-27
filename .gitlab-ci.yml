@@ -91,7 +91,6 @@ backend-docker:
     - echo "Building docker successfully!"
   only:
     - main
-
 ####################
 ### Deploy stage ###
 ####################
@@ -99,15 +98,35 @@ backend-deploy:
   stage: deploy
   image: gitlab/dind:latest
   before_script:
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
     - chmod 400 "$SSH_PRIVATE_KEY"
     - ssh-add "$SSH_PRIVATE_KEY"
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
-    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker images && \ docker ps -a
-    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker compose down
-    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker compose up -d
+    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker images && docker ps -a
+    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker-compose down
+    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker-compose up -d
     - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker image prune -f || true
   only:
     - main
+# ####################
+# ### Deploy stage ###
+# ####################
+# backend-deploy:
+#   stage: deploy
+#   image: gitlab/dind:latest
+#   before_script:
+#     - eval $(ssh-agent -s)
+#     - chmod 400 "$SSH_PRIVATE_KEY"
+#     - ssh-add "$SSH_PRIVATE_KEY"
+#     - mkdir -p ~/.ssh
+#     - chmod 700 ~/.ssh
+#   script:
+#     - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker images && \ docker ps -a
+#     - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker compose down
+#     - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker compose up -d
+#     - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker image prune -f || true
+#   only:
+#     - main
