@@ -98,10 +98,11 @@ backend-deploy:
   stage: deploy
   image: gitlab/dind:latest
   before_script:
-    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client sshpass -y )'
     - eval $(ssh-agent -s)
     - chmod 400 "$SSH_PRIVATE_KEY"
-    - ssh-add "$SSH_PRIVATE_KEY"
+    - sshpass -p "" ssh-add "$SSH_PRIVATE_KEY"
+    - echo "$AWS_PASSWORD" | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
