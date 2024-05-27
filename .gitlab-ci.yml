@@ -102,7 +102,6 @@ backend-deploy:
     - eval $(ssh-agent -s)
     - chmod 400 "$SSH_PRIVATE_KEY"
     - ssh-add "$SSH_PRIVATE_KEY"
-    - echo "$SSH_PRIVATE_KEY_PASSPHRASE"
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
   script:
