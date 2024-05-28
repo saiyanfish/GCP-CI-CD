@@ -102,10 +102,9 @@ backend-deploy:
     - gcloud config set project nodetest-424207
     - gcloud config set compute/zone us-central1-a
   script:
-    - gcloud compute ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} --command "docker images && docker ps -a"
-    - gcloud compute ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} --command "docker-compose down"
-    - gcloud compute ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} --command "docker-compose up -d"
-    - gcloud compute ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} --command "docker image prune -f || true"
+    - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker-compose down"
+    - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker-compose up -d --build"
+    - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker image prune -f || true"
   only:
     - main
 # ####################
