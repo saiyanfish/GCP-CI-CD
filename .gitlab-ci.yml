@@ -96,20 +96,16 @@ backend-docker:
 ####################
 backend-deploy:
   stage: deploy
-  image: gitlab/dind:latest
+  image: google/cloud-sdk:latest
   before_script:
-    - 'command -v ssh-agent >/dev/null || (apt-get update -y && apt-get install -y openssh-client)'
-    - eval $(ssh-agent -s)
-    - ssh-add -D
-    - chmod 400 "$SSH_PRIVATE_KEY"
-    - ssh-add "$SSH_PRIVATE_KEY"
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
+    - gcloud auth activate-service-account --key-file=${GCP_JOSN}
+    - gcloud config set project nodetest-424207
+    - gcloud config set compute/zone us-central1-a
   script:
-    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker images && docker ps -a
-    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker-compose down
-    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker-compose up -d
-    - ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} docker image prune -f || true
+    - gcloud compute ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} --command "docker images && docker ps -a"
+    - gcloud compute ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} --command "docker-compose down"
+    - gcloud compute ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} --command "docker-compose up -d"
+    - gcloud compute ssh ${GCE_LOGIN_USER}@${GCP_VM_HOST} --command "docker image prune -f || true"
   only:
     - main
 # ####################
