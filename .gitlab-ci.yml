@@ -99,10 +99,9 @@ backend-deploy:
   image: google/cloud-sdk:latest
   before_script:
     - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
+    - chmod 600 $SSH_PRIVATE_KEY
     - eval $(ssh-agent -s)
-    - ssh-add ~/.ssh/id_rsa
+    - ssh-add $SSH_PRIVATE_KEY
   script:
     - gcloud auth activate-service-account --key-file=${GCP_JSON}
     - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker-compose up -d --build"
