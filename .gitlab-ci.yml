@@ -98,10 +98,9 @@ backend-deploy:
   stage: deploy
   image: google/cloud-sdk:latest
   before_script:
-    - echo $GCP_JSON | base64 -d > /tmp/keyfile.json
-    - gcloud auth activate-service-account --key-file=/tmp/keyfile.json
-  script:
+    - gcloud auth activate-service-account --key-file=${GCP_JOSN}
     - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker-compose down"
+  script:
     - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker-compose up -d --build"
     - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker image prune -f || true"
   only:
