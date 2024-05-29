@@ -99,8 +99,6 @@ backend-deploy:
   image: google/cloud-sdk:latest
   before_script:
     - gcloud auth activate-service-account --key-file=${GCP_JOSN}
-    - gcloud config set project nodetest-424207
-    - gcloud config set compute/zone us-central1-a
   script:
     - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker-compose down"
     - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker-compose up -d --build"
