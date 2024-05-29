@@ -103,8 +103,10 @@ backend-deploy:
     - eval $(ssh-agent -s)
     - ssh-add $SSH_PRIVATE_KEY
   script:
-    - gcloud compute --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker-compose up -d --build"
-    - gcloud compute --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker image prune -f || true"
+    # - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker-compose up -d --build"
+    # - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker image prune -f || true"
+    - ssh raygun3491@34.16.82.128 "docker-compose up -d --build"
+    - ssh raygun3491@34.16.82.128 "docker image prune -f || true"
   only:
     - main
 # ####################
