@@ -98,11 +98,12 @@ backend-deploy:
   stage: deploy
   image: google/cloud-sdk:latest
   before_script:
-    - gcloud auth activate-service-account --key-file=${GCP_JOSN}
+    - echo $GCP_JSON | base64 -d > /tmp/keyfile.json
+    - gcloud auth activate-service-account --key-file=/tmp/keyfile.json
   script:
-    - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --ssh-flag="-l raygun3491" --command "docker-compose down"
-    - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --ssh-flag="-l raygun3491" --command "docker-compose up -d --build"
-    - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --ssh-flag="-l raygun3491" --command "docker image prune -f || true"
+    - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker-compose down"
+    - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker-compose up -d --build"
+    - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker image prune -f || true"
   only:
     - main
 # ####################
