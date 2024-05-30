@@ -91,7 +91,8 @@ backend-docker:
   services:
     - docker:dind
   script:
-    - echo "Start building docker"
+    - echo "Start building docker"''
+    - echo "$DATABASE"
     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
     - docker build -t raygun3491/s3upload:latest .
     - docker push raygun3491/s3upload:latest
