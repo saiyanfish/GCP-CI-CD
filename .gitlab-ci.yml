@@ -35,45 +35,45 @@
 #     - main
 
 stages:
-  - build
-  - test
-  - docker
+  # - build
+  # - test
+  # - docker
   - deploy
 
 ###################
 ### Build stage ###
 ###################
-backend-build:
-  stage: build
-  image: node
-  script:
-    - echo "Start building backend"
-    - npm install
-    - echo "Build backend successfully!"
-  cache:
-    paths:
-      - node_modules/
-  artifacts:
-    paths:
-      - build/
-      - node_modules/
-  only:
-    - main
-    - develop
+# backend-build:
+#   stage: build
+#   image: node
+#   script:
+#     - echo "Start building backend"
+#     - npm install
+#     - echo "Build backend successfully!"
+#   cache:
+#     paths:
+#       - node_modules/
+#   artifacts:
+#     paths:
+#       - build/
+#       - node_modules/
+#   only:
+#     - main
+#     - develop
 
-##################
-### Test stage ###
-##################
-backend-test:
-  stage: test
-  image: node
-  script:
-    - echo "Start testing backend"
-    - npm run test
-    - echo "Test backend successfully!"
-  only:
-    - main
-    - develop
+# ##################
+# ### Test stage ###
+# ##################
+# backend-test:
+#   stage: test
+#   image: node
+#   script:
+#     - echo "Start testing backend"
+#     - npm run test
+#     - echo "Test backend successfully!"
+#   only:
+#     - main
+#     - develop
 
 ####################
 ### Docker stage ###
@@ -98,7 +98,7 @@ backend-deploy:
   stage: deploy
   image: google/cloud-sdk:latest
   before_script:
-    - gcloud auth activate-service-account --key-file=${GCP_JOSN}
+    - gcloud auth activate-service-account --key-file=$GCP_JOSN
   script:
     - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "raygun3491@$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker-compose down"
     - gcloud compute ssh --zone "$GCLOUD_COMPUTE_ZONE" "raygun3491@$GCP_VM_HOST" --project "$GCLOUD_PROJECT_ID" --command "docker-compose up -d --build"
