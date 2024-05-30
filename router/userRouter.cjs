@@ -1,6 +1,5 @@
 const express = require('express');
 const s3User = require('../controller/userController.cjs');
-const mysqlUser = require('../controller/mysqlUserController.cjs');
 
 const userRouter = express.Router();
 
