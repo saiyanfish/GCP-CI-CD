@@ -7,7 +7,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const userRouter = require('./router/userRouter.cjs');
 
-dotenv.config({ path: './config.env' });
+// dotenv.config({ path: './config.env' });
 app.use(express.json({}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
