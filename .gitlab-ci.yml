@@ -39,6 +39,13 @@ stages:
   - test
   - docker
   - deploy
+variables:
+  AWS_DEFAULT_REGION: ap-southeast-2
+  AWS_ACCESS_KEY_ID: AKIA5P6RKNIVRK7B5JAX
+  AWS_SECRET_ACCESS_KEY: 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
+  DATABASE_USERNAME: saiyanfish
+  DATABASE: mongodb+srv://saiyanfish:<PASSWORD>@natours.0n695xr.mongodb.net/s3?retryWrites=true&w=majority
+  DATABASE_PASSWORD: tydro1-dufraz-gizkeB
 
 ###################
 ### Build stage ###
