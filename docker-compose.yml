@@ -1,5 +1,17 @@
 services:
   backend:
-    image: raygun3491/s3upload
+    build: .
     ports:
       - 8000:8000
+    depends_on:
+      - db
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: test5678
+    ports:
+      - '3307:3306'
+    volumes:
+      - db-data:/var/lib/mysql
+volumes:
+  db-data:
